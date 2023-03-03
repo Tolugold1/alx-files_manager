@@ -53,9 +53,9 @@ class UsersController {
         }
       });
     } else {
-      return res.status(404).send({error: 'Unauthorized'});
+      return res.status(401).send({error: 'Unauthorized'});
     }
   }
-}
+};
 
 export default UsersController;

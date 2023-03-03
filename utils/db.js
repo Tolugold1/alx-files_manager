@@ -29,7 +29,7 @@ class DBClient {
   };
 
   async nbFiles() {
-    const number_of_files = await this.files.count();
+    const number_of_files = await this.files.countDocuments();
     return number_of_files;
   };
 
