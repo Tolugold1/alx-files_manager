@@ -5,11 +5,11 @@ const waitConnection = () => {
         let i = 0;
         const repeatFct = async () => {
             setTimeout(() => {
-                i += 1;
+                i += 1;/* 
                 if (i >= 10) {
-                    reject()
+                    reject(new Error(err.message))
                 }
-                else if(!dbClient.isAlive()) {
+                else  */if(!dbClient.isAlive()) {
                     repeatFct()
                 }
                 else {
