@@ -79,4 +79,6 @@ class FilesController {
       return res.status(401).send({error: 'Unauthorized'})
     }
   }
-}
+};
+
+export default FilesController;
