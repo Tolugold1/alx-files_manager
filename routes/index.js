@@ -26,11 +26,11 @@ index.get('disconnect', (req, res) => {
 });
 
 index.get('users/me', (req, res) => {
-  UsersController.getMe
+  UsersController.getMe;
 });
 
 index.post('files', (req, res) => {
-  FilesController.postUpload
-})
+  FilesController.postUpload;
+});
 
 export default index;
