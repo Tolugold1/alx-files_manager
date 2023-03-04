@@ -14,23 +14,31 @@ index.get('stats', (req, res) => {
 });
 
 index.get('users' , (req, res) => {
-  UsersController.postNew;
+  UsersController.postNew(req, res);
 });
 
 index.get('connect', (req, res) => {
-  AuthController.getConnect;
+  AuthController.getConnect(req, res);
 });
 
 index.get('disconnect', (req, res) => {
-  AuthController.getDisconnect;
+  AuthController.getDisconnect(req, res);
 });
 
 index.get('users/me', (req, res) => {
-  UsersController.getMe;
+  UsersController.getMe(req, res);
 });
 
 index.post('files', (req, res) => {
-  FilesController.postUpload;
+  FilesController.postUpload(req, res);
+});
+
+index.get('files/:id', (req, res) => {
+  FilesController.getShow(req, res);
+});
+
+index.get('files', (req, res) => {
+  FilesController.getIndex(req, res);
 });
 
 export default index;

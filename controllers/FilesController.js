@@ -76,7 +76,16 @@ class FilesController {
         }
       }
     } catch (error) {
-      return res.status(401).send({error: 'Unauthorized'})
+      return res.status(401).send({error: 'Unauthorized'});
+    }
+  }
+
+  static async getShow(req, res) {
+    try {
+      const user = UsersController.getMe(req, res);
+      const user_file = dbClient.db.collection('files').findOne({userId: req.params.id})
+    } catch (error) {
+      return res.status(401).send({error: 'Unauthorized'});
     }
   }
 };
