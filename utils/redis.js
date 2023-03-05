@@ -20,9 +20,7 @@ class RedisClient {
   };
 
   async set(key, value, duration) {
-    this.r.set(key, value, {
-      EX: duration
-    });
+    this.r.setex(key, duration, value);
   };
 
   async del(key) {
