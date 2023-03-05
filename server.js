@@ -3,7 +3,8 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 
-var index = require("./routes/index.js");
+var index = require("./routes/index");
+
 app.use(express.json())
 app.use("/", index)
 
