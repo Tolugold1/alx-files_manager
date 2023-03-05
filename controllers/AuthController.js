@@ -1,6 +1,6 @@
 import dbClient from "../utils/db";
 import redisClient from "../utils/redis";
-const uuid = require('uuidv4');
+import { v4 as uuidv4 } from 'uuid';
 
 class AuthController {
   static async getConnect(req, res) {
@@ -17,7 +17,7 @@ class AuthController {
         if (user) {
           const stored_pwd = new Buffer(user.password).toString();
           if (password === stored_pwd) {
-            const random_token = uuid();
+            const random_token = uuidv4();
             const key = `auth_${random_token}`;
             redisClient.set(key, user._id, 60 * 60 * 24);
             return res.status(200).send({ "token": random_token });
