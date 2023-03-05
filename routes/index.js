@@ -1,9 +1,11 @@
-const express = require(express);
+const express = require('express');
+const bodyParser = require('body-parser');
 import AppController from "../controllers/AppController";
 import UsersController from "../controllers/UsersController";
 import AuthController from "../controllers/AuthController";
 import FilesController from "../controllers/FilesController"
 const index = express.Router();
+index.use(bodyParser.json())
 
 index.get('status', (req, res) => {
   AppController.getStatus(req, res);
