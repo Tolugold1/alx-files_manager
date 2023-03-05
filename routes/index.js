@@ -43,4 +43,4 @@ index.get('files', (req, res) => {
   FilesController.getIndex(req, res);
 });
 
-export default index;
+module.exports = index;
