@@ -3,7 +3,7 @@ import { promisify } from 'util';
 
 class RedisClient {
   constructor() {
-    this.r = redis.createClient({url: 'redis://127.0.0.1:6379'});
+    this.r = redis.createClient({host: '127.0.0.1', port: 6379});
     this.getClient = promisify(this.r.get).bind(this.r);
     this.r.on('error', err => {
       console.log(`Redis client not connected to the server: ${err.message}`);
