@@ -7,11 +7,11 @@ import FilesController from "../controllers/FilesController"
 const index = express.Router();
 index.use(bodyParser.json())
 
-index.get('status', (req, res) => {
+index.get('/status', (req, res) => {
   AppController.getStatus(req, res);
 });
 
-index.get('stats', (req, res) => {
+index.get('/stats', (req, res) => {
   AppController.getStats(req, res)
 });
 
