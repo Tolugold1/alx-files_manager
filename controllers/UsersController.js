@@ -20,11 +20,11 @@ class UsersController {
   
       const hashedPw = sha1(req.body.password);
       const newUser = {
-        email: req.body.email,
-        password: hashedPw,
+        'email': req.body.email,
+        'password': hashedPw,
       };
-  
-      dbClient.db.collection('users').insertOne(JSON.stringify(newUser), (err, user) => {
+
+      dbClient.db.collection('users').insertOne(newUser, (err, user) => {
         if (err) {
           return res.status(err.status).send({error: err})
         }
