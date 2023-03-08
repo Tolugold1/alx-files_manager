@@ -5,6 +5,9 @@ class RedisClient {
   constructor() {
     this.r = createClient();
     this.getClient = promisify(this.r.get).bind(this.r);
+    this.on('error', (err) => {
+      console.log(err);
+    });
   };
 
   connect() {
@@ -14,16 +17,20 @@ class RedisClient {
       });
   
       this.r.once('error', (err) => {
-        rej(Error(`Redis client not connected to the server: ${err}`));
+        rej(err);
       });
     });
   };
 
   isAlive = () => {
+    if (this.r.connected == true) {
+      return true;
+    }
     try {
       this.connect();
       return true;
-    } catch {
+    } catch (err) {
+      console.log(`Redis client not connected to the server: ${err}`)
       return false;
     }
   };
