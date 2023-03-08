@@ -9,11 +9,11 @@ class RedisClient {
 
   connect() {
     return new Promise((res, rej) => {
-      this.r.on('ready', () => {
+      this.r.once('ready', () => {
         res();
       });
   
-      this.r.on('error', (err) => {
+      this.r.once('error', (err) => {
         rej(Error(`Redis client not connected to the server: ${err}`));
       });
     });
@@ -49,4 +49,5 @@ class RedisClient {
 };
 
 const redisClient = new RedisClient();
+
 export default redisClient;
