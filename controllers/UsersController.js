@@ -26,9 +26,8 @@ class UsersController {
 
       dbClient.db.collection('users').insertOne(newUser)
       .then(resp => {
-        dbClient.db.collection('users').findOne(req.body.email)
+        dbClient.db.collection('users').findOne({email: req.body.email})
         .then(resp => {
-          userId = resp._id;
           return res.status(201).send({email: resp.email, id: resp._id});
         });
       }).catch (err => (res.status(err.status).send({'error': err,})))

@@ -15,7 +15,7 @@ index.get('/stats', (req, res) => {
   AppController.getStats(req, res)
 });
 
-index.get('/users', (req, res) => {
+index.post('/users', (req, res) => {
   UsersController.postNew(req, res);
 });
 
