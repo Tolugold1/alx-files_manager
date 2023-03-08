@@ -44,7 +44,7 @@ class UsersController {
       dbClient.db.collection('users').findOne({_id: user_id})
       .then(resp => {
         if (resp != {}) {
-          return res.status(200).send({id: user_id, email: resp})
+          return res.status(200).send({id: user_id, email: resp.email})
         } else {
           return res.status(err.status).send({error: err});
         }
