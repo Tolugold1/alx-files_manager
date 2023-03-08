@@ -1,13 +1,10 @@
-import redis from 'redis';
+import {createClient} from 'redis';
 import { promisify } from 'util';
 
 class RedisClient {
   constructor() {
-    this.r = redis.createClient();
+    this.r = createClient();
     this.getClient = promisify(this.r.get).bind(this.r);
-    this.r.on('error', err => {
-      console.log(`Redis client not connected to the server: ${err.message}`);
-    });
   };
 
   connect() {
@@ -17,15 +14,12 @@ class RedisClient {
       });
   
       this.r.on('error', (err) => {
-        rej(new Error(`Redis client not connected to the server: ${err.message}`));
+        rej(Error(`Redis client not connected to the server: ${err}`));
       });
     });
   };
 
   isAlive = () => {
-    if (this.r.connected == true) {
-      return true
-    }
     try {
       this.connect();
       return true;
