@@ -20,18 +20,18 @@ class UsersController {
   
       const hashedPw = sha1(req.body.password);
       const newUser = {
-        'email': req.body.email,
-        'password': hashedPw,
+        email: req.body.email,
+        password: hashedPw,
       };
 
-      dbClient.db.collection('users').insertOne(newUser, (err, user) => {
-        if (err) {
-          return res.status(err.status).send({error: err})
-        }
-        if (user) {
-          return res.status(201).send({id: user._id, email: req.body.email});
-        }
-      });
+      dbClient.db.collection('users').insertOne(newUser)
+      .then(resp => {
+        dbClient.db.collection('users').findOne(req.body.email)
+        .then(resp => {
+          userId = resp._id;
+          return res.status(201).send({email: resp.email, id: resp._id});
+        });
+      }).catch (err => (res.status(err.status).send({'error': err,})))
     } catch (error) {
       return res.status(500).send({error: 'Server error'})
     }
