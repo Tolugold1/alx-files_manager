@@ -18,7 +18,7 @@ class AuthController {
           const random_token = uuidv4();
           const key = `auth_${random_token}`;
           redisClient.set(key, resp._id, 60 * 60 * 24);
-          return res.status(200).send({ "token": random_token });
+          return res.status(200).send({ "token": random_token, id: resp._id });
         } else {
           return res.status(401).send({error: 'Unauthorized'});
         }
