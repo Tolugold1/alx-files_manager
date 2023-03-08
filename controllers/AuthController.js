@@ -2,6 +2,8 @@ import dbClient from "../utils/db";
 import redisClient from "../utils/redis";
 import { v4 as uuidv4 } from 'uuid';
 
+const sha1 = require('sha1');
+
 class AuthController {
   static async getConnect(req, res) {
     if (req.headers.authorization) {
@@ -9,26 +11,19 @@ class AuthController {
       const decode_auth = new Buffer(auth, 'base64').toString();
       const email = decode_auth.split(':')[0];
       const password = decode_auth.split(':')[1];
-
-      dbClient.db.collection('users').findOne({email: email}, (err, user) => {
-        if (err) {
-          return res.status(400).send({error: 'err'});
-        }
-        if (user) {
-          const stored_pwd = new Buffer(user.password).toString();
-          if (password === stored_pwd) {
-            const random_token = uuidv4();
-            const key = `auth_${random_token}`;
-            redisClient.set(key, user._id, 60 * 60 * 24);
-            return res.status(200).send({ "token": random_token });
-          } else {
-            return res.status(401).send({error: 'Incorrect password'});
-          }
-        } else if (user == null) {
+      const hashpwd = sha1(password)
+      dbClient.db.collection('users').findOne({email: email, password: hashpwd})
+      .then(resp => {
+        if (resp != {}) {
+          const random_token = uuidv4();
+          const key = `auth_${random_token}`;
+          redisClient.set(key, resp._id, 60 * 60 * 24);
+          return res.status(200).send({ "token": random_token });
+        } else {
           return res.status(401).send({error: 'Unauthorized'});
         }
-      })
-    }
+      });
+    };
   };
 
   static async getDisconnect(req, res) {
