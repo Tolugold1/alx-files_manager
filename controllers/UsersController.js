@@ -24,14 +24,14 @@ class UsersController {
         password: hashedPw,
       };
   
-      dbClient.db.collection('users').insertOne(newUser, (err, user) => {
+      dbClient.db.collection('users').insertOne(JSON.stringify(newUser), (err, user) => {
         if (err) {
           return res.status(err.status).send({error: err})
         }
         if (user) {
           return res.status(201).send({id: user._id, email: req.body.email});
         }
-      })
+      });
     } catch (error) {
       return res.status(500).send({error: 'Server error'})
     }
