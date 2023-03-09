@@ -46,13 +46,13 @@ class UsersController {
         if (resp !== null) {
           return res.status(200).send({id: resp._id, email: resp.email})
         } else {
-          const err = new Error('No user found');
-          err.status = 404;
-          return res.status(err.status).send({error: err});
+          return res.status(401).send({error: 'Unauthorized'});
         }
       });
     } else {
-      return res.status(401).send({error: 'Unauthorized'});
+      const err = new Error('No user found');
+      err.status = 404;
+      return res.status(err.status).send({error: err});
     }
   }
 };
