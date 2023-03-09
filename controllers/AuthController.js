@@ -1,5 +1,5 @@
-import dbClient from "../utils/db";
-import redisClient from "../utils/redis";
+import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
 import { v4 as uuidv4 } from 'uuid';
 
 const sha1 = require('sha1');
@@ -14,11 +14,13 @@ class AuthController {
       const hashpwd = sha1(password)
       dbClient.db.collection('users').findOne({email: email, password: hashpwd})
       .then(resp => {
-        if (resp != {}) {
+        if (resp != null) {
           const random_token = uuidv4();
           const key = `auth_${random_token}`;
-          redisClient.set(key, resp._id, 60 * 60 * 24);
-          return res.status(200).send({ "token": random_token, id: resp._id });
+          const id = String(resp._id);
+          redisClient.set(key, id, 86400);
+          const user_id = redisClient.get(key);
+          return res.status(200).send({ 'token': random_token });
         } else {
           return res.status(401).send({error: 'Unauthorized'});
         }
@@ -27,11 +29,11 @@ class AuthController {
   };
 
   static async getDisconnect(req, res) {
-    const k = req.headers.X-Token.split(' ')[1];
+    const k = req.get(X-Token);
     const key = `auth_${k}`;
     const key_value = redisClient.get(key);
     if (key_value.length !== 0) {
-      redisClient.del(key);
+      await redisClient.del(key);
       return res.status(204);
     } else {
       return res.status(404).send({error: 'Unauthorized'});

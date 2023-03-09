@@ -37,15 +37,17 @@ class UsersController {
   }
 
   static async getMe(req, res) {
-    const k = req.headers['X-Token'];
+    const k = req.get('X-Token');;
     const key = `auth_${k}`;
-    const user_id = redisClient.get(key);
-    if (user_id != {}) {
-      dbClient.db.collection('users').findOne({_id: user_id})
+    const user_id = await redisClient.get(key);
+    if (user_id !== null) {
+      dbClient.db.collection('users').findOne({_id: new ObjectId(user_id)})
       .then(resp => {
-        if (resp != {}) {
-          return res.status(200).send({id: user_id, email: resp.email})
+        if (resp !== null) {
+          return res.status(200).send({id: resp._id, email: resp.email})
         } else {
+          const err = new Error('No user found');
+          err.status = 404;
           return res.status(err.status).send({error: err});
         }
       });
