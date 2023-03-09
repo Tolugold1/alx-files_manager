@@ -20,7 +20,6 @@ class AuthController {
           const key = `auth_${random_token}`;
           const id = String(resp._id);
           redisClient.set(key, id, 86400);
-          const user_id = redisClient.get(key);
           return res.status(200).send({ 'token': random_token });
         } else {
           return res.status(401).send({error: 'Unauthorized'});
@@ -32,7 +31,7 @@ class AuthController {
   static async getDisconnect(req, res) {
     const k = req.get('X-Token');
     const key = `auth_${k}`;
-    const user_id = await redisClient.get(key);
+    const user_id = await redisClient.get(key)
     if (user_id !== null) {
       dbClient.db.collection('users').findOne({_id: new ObjectId(user_id)})
       .then(resp => {
@@ -44,9 +43,9 @@ class AuthController {
         }
       });
     } else {
-      const err = new Error('No user found');
+      const err = new Error('No id found');
       err.status = 404;
-      return res.status(err.status).send({error: err});
+      return res.status(err.status).send({error: err, key: key, user_id: user_id});
     }
   };
 };
